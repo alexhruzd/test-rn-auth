@@ -1,30 +1,37 @@
-import React from 'react';
-import { Button, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Button } from "@material-ui/core";
 
 const StartScreen = (props) => {
-    return (
-        <View style={styles.container}>
-            <Text>This StartScreen {props.num}</Text>
-            <Button 
-                title="Login"
-                onPress={()=> props.navigation.navigate("Login")}
-            />
-            <Button 
-                title="Register"
-                onPress={()=> props.navigation.navigate("Register")}
-            />
-        </View>
-    );
-}
+  return (
+    <View style={styles.container}>
+      <Button
+        onClick={() => props.navigation.navigate("Login")}
+        variant="contained"
+        color="primary"
+        style={{ marginBottom: "20px", width: "50%" }}
+      >
+        Login
+      </Button>
+      <Button
+        onClick={() => props.navigation.navigate("Register")}
+        variant="contained"
+        color="primary"
+        style={{ width: "50%" }}
+      >
+        Register
+      </Button>
+    </View>
+  );
+};
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,  
-      backgroundColor: "green",
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
-  
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff"
+  },
+});
 
 export default StartScreen;
