@@ -1,28 +1,31 @@
-import { RESTORE_TOKEN, SING_IN, SING_OUT } from "./actions";
+import { RESTORE_TOKEN, SIGN_IN, SIGN_OUT } from "./actions";
 
-const authReducer = (state, action) => {
+const AuthReducer = (state, action) => {
   switch (action.type) {
     case RESTORE_TOKEN:
       return {
         ...state,
         userToken: action.token,
+        isLoading: false,
       };
 
-    case SING_IN:
+    case SIGN_IN:
       return {
         ...state,
         isOut: false,
         userToken: action.token,
       };
 
-    case SING_OUT:
+    case SIGN_OUT:
       return {
         ...state,
-        isOut: true,
         userToken: null,
+        isOut: true,
       };
 
     default:
       return state;
   }
 };
+
+export default AuthReducer;

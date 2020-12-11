@@ -1,7 +1,7 @@
 export const RESTORE_TOKEN = "RESTORE_TOKEN";
-export const SING_IN = "SING_IN";
-export const SING_OUT = "SING_OUT";
+export const SIGN_IN = "SIGN_IN";
+export const SIGN_OUT = "SIGN_OUT";
 
 export const restoreToken = (token) => ({type: RESTORE_TOKEN, token: token});
-export const singIn = (token) => ({type: SING_IN, token: token});
-export const singOut = (token) => ({type: SING_OUT, token: token});
+export const signIn = (token) => ({type: SIGN_IN, token: token});
+export const signOut = (token) => ({type: SIGN_OUT});

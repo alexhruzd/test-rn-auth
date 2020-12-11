@@ -3,10 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
+import AuthContext from "../../context/auth/AuthContext";
 
-const RegisterScreen = () => {
+const RegisterScreen = (props) => {
   const { control, handleSubmit, errors } = useForm({ mode: "onChange" });
   const [failPassword, setFailPassword] = useState(false);
+  const { onSignIn } = React.useContext(AuthContext);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -14,7 +16,9 @@ const RegisterScreen = () => {
       setFailPassword(true);
     } else {
       setFailPassword(false);
-      addUser(data);
+      addUser(data).then(() => {
+        onSignIn(data);
+      });
     }
   };
 

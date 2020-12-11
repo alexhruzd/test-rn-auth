@@ -1,14 +1,17 @@
 import { Button, TextField } from "@material-ui/core";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import AuthContext from '../../context/auth/AuthContext';
 
 const LoginScreen = () => {
   const { control, handleSubmit, errors } = useForm({ mode: "onChange" });
+  const { onSignIn } = React.useContext(AuthContext);
+
 
   const onSubmit = (data) => {
-    console.log(data);
-
+    
+    onSignIn(data);
   };
 
   return (

@@ -1,32 +1,64 @@
-//import { StatusBar } from 'expo-status-bar';
-import React, { useState } from "react";
-//import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useReducer } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import StartScreen from "./screens/StartScreen";
-import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisterScreen";
 import AuthContext from "./context/auth/AuthContext";
+import AuthReducer from "./context/auth/AuthReducer";
+import { restoreToken, signIn, signOut } from "./context/auth/actions";
+import StartStackNavigator from "./navigation/StartStackNavigator";
+import MainDrawerNavigator from "./navigation/MainDrawerNavigator";
 
-const Stack = createStackNavigator();
 
 export default function App() {
-  const [auth, setAuth] = useState(false)
+  const [state, dispatch] = useReducer(AuthReducer, {
+    userToken: null,
+    isLoading: true,
+    isOut: false,
+  });
+  console.log(state);
+
+  useEffect(() => {
+    console.log("effect");
+    const bootstrapAsync = async () => {
+      let userToken;
+      try {
+        userToken = await AsyncStorage.getItem("userToken");
+        console.log("tok ", userToken);
+      } catch (error) {
+        console.log("Something went wrong", error);
+      }
+
+      dispatch(restoreToken(userToken));
+    };
+
+    bootstrapAsync();
+  }, []);
+
+  const authContext = useMemo(
+    () => ({
+      onSignIn: (user) => {
+        let userToken = user.login + user.password;
+        dispatch(signIn(userToken));
+      },
+
+      onSignOut: () => dispatch(signOut()),
+    }),
+    []
+  );
+
+  // There should be a Loader screen
+  if (state.isLoading) {
+    return null;
+  }
+
   return (
-    <AuthContext.Provider value={{auth, setAuth}}>
+    <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Start">
-          <Stack.Screen name="Start">
-            {(props) => <StartScreen {...props} num={1} />}
-          </Stack.Screen>
-          <Stack.Screen name="Login">
-            {(props) => <LoginScreen {...props} />}
-          </Stack.Screen>
-          <Stack.Screen name="Register">
-            {(props) => <RegisterScreen {...props} />}
-          </Stack.Screen>
-        </Stack.Navigator>
+        {state.userToken === null ? (
+          <StartStackNavigator isOut={state.isOut}/>
+        ) : (
+          <MainDrawerNavigator />
+        )}
       </NavigationContainer>
     </AuthContext.Provider>
   );

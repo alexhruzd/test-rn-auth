@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button } from "@material-ui/core";
 
-const StartScreen = (props) => {
+const StartScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Button
-        onClick={() => props.navigation.navigate("Login")}
+        onClick={() => navigation.navigate("Login")}
         variant="contained"
         color="primary"
         style={{ marginBottom: "20px", width: "50%" }}
@@ -14,7 +14,7 @@ const StartScreen = (props) => {
         Login
       </Button>
       <Button
-        onClick={() => props.navigation.navigate("Register")}
+        onClick={() => navigation.navigate("Register")}
         variant="contained"
         color="primary"
         style={{ width: "50%" }}
