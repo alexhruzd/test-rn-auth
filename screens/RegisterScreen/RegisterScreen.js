@@ -1,105 +1,147 @@
-import { TextField, Button } from "@material-ui/core";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Input } from "react-native-elements";
 import AuthContext from "../../context/auth/AuthContext";
 
-const RegisterScreen = (props) => {
+const RegisterScreen = () => {
   const { control, handleSubmit, errors } = useForm({ mode: "onChange" });
   const [failPassword, setFailPassword] = useState(false);
-  const { onSignIn } = React.useContext(AuthContext);
+  const [failUser, setFailUser] = useState(false);
+  const { onRegister, onLoading } = React.useContext(AuthContext);
 
   const onSubmit = (data) => {
-    console.log(data);
     if (data.password !== data.passwordRetry) {
       setFailPassword(true);
     } else {
-      setFailPassword(false);
-      addUser(data).then(() => {
-        onSignIn(data);
+
+      onRegister(data).then((err) => {
+        !err && setFailUser(true)
       });
     }
   };
 
-  const addUser = async (user) => {
-    try {
-      await AsyncStorage.setItem("userToken", user.login + user.password);
-    } catch (e) {
-      console.log("Something went wrong", e);
-    }
-  };
-
   return (
-    <View style={stylesInput.container}>
+    <View style={styles.container}>
       <Controller
-        style={{ marginBottom: "10px", width: "90%" }}
         control={control}
-        as={TextField}
-        label="Enter login or email address"
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            label="Enter login or email:"
+            errorStyle={{ color: "red" }}
+            errorMessage={errors.login?.message}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+          />
+        )}
         name="login"
-        defaultValue=""
         rules={{ required: "Login is required!" }}
-        error={errors.login && true}
-        helperText={errors.login?.message}
+        defaultValue=""
       />
       <Controller
-        style={{ marginBottom: "10px", width: "90%" }}
         control={control}
-        as={TextField}
-        label="Enter your name"
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            label="Enter name:"
+            errorStyle={{ color: "red" }}
+            errorMessage={errors.name?.message}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+          />
+        )}
         name="name"
-        defaultValue=""
         rules={{ required: "Name is required!" }}
-        error={errors.name && true}
-        helperText={errors.name?.message}
+        defaultValue=""
       />
       <Controller
-        style={{ marginBottom: "10px", width: "90%" }}
         control={control}
-        as={TextField}
-        label="Enter password"
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            label="Enter password:"
+            errorStyle={{ color: "red" }}
+            errorMessage={errors.password?.message}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+            secureTextEntry={true}
+          />
+        )}
         name="password"
-        defaultValue=""
         rules={{ required: "Password is required!" }}
-        error={errors.password && true}
-        helperText={errors.password?.message}
-        type="password"
+        defaultValue=""
       />
       <Controller
-        style={{ marginBottom: "10px", width: "90%" }}
         control={control}
-        as={TextField}
-        label="Retry password"
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            label="Retry password:"
+            errorStyle={{ color: "red" }}
+            errorMessage={errors.passwordRetry?.message}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+            secureTextEntry={true}
+          />
+        )}
         name="passwordRetry"
+        rules={{ required: "Reapeted password is required!" }}
         defaultValue=""
-        rules={{ required: "Password is required!" }}
-        error={errors.passwordRetry && true}
-        helperText={errors.passwordRetry?.message}
-        type="password"
       />
 
       {failPassword && (
-        <Text style={{ color: "red" }}>Retry password is incorrect</Text>
+        <Text style={{ color: "red", marginBottom: 10 }}>
+          Password is incorrect
+        </Text>
+      )}
+      {failUser && (
+        <Text style={{ color: "red", marginBottom: 10 }}>
+          This user is required!
+        </Text>
       )}
 
-      <Button
-        onClick={handleSubmit(onSubmit)}
-        variant="contained"
-        color="primary"
-        style={{ marginBottom: "10px", marginTop: "10px" }}
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        style={styles.appButtonContainer}
       >
-        Register
-      </Button>
+        <Text style={styles.appButtonText}>Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const stylesInput = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#fff",
+  },
+  input: {
+    borderBottomWidth: 2,
+    borderBottomColor: "grey",
+    backgroundColor: "white",
+    width: "90%",
+  },
+  label: {
+    width: "90%",
+  },
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: "50%",
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
   },
 });
 

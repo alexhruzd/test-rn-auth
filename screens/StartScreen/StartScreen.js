@@ -1,26 +1,21 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Button } from "@material-ui/core";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const StartScreen = ({navigation}) => {
+const StartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Button
-        onClick={() => navigation.navigate("Login")}
-        variant="contained"
-        color="primary"
-        style={{ marginBottom: "20px", width: "50%" }}
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Login")}
+        style={[styles.appButtonContainer, { marginBottom: 20 }]}
       >
-        Login
-      </Button>
-      <Button
-        onClick={() => navigation.navigate("Register")}
-        variant="contained"
-        color="primary"
-        style={{ width: "50%" }}
+        <Text style={styles.appButtonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Register")}
+        style={styles.appButtonContainer}
       >
-        Register
-      </Button>
+        <Text style={styles.appButtonText}>Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -30,7 +25,22 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+  },
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: "50%",
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
   },
 });
 

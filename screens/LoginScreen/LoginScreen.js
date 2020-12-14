@@ -1,62 +1,101 @@
-import { Button, TextField } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
-import AuthContext from '../../context/auth/AuthContext';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Input } from "react-native-elements";
+import AuthContext from "../../context/auth/AuthContext";
 
 const LoginScreen = () => {
   const { control, handleSubmit, errors } = useForm({ mode: "onChange" });
   const { onSignIn } = React.useContext(AuthContext);
-
+  const [ErrMess, setErrMess] = useState("");
 
   const onSubmit = (data) => {
-    
-    onSignIn(data);
+    onSignIn(data).then((mess) => {
+      setErrMess(mess);
+    });
   };
 
   return (
-    <View style={stylesInput.container}>
+    <View style={styles.container}>
       <Controller
-        style={{ marginBottom: "10px", width: "90%" }}
         control={control}
-        as={TextField}
-        label="Enter login or email address"
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            label="Enter login or email:"
+            errorStyle={{ color: "red" }}
+            errorMessage={errors.login?.message}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+          />
+        )}
         name="login"
-        defaultValue=""
         rules={{ required: "Login is required!" }}
-        error={errors.login && true}
-        helperText={errors.login?.message}
+        defaultValue=""
       />
       <Controller
-        style={{ marginBottom: "10px", width: "90%" }}
         control={control}
-        as={TextField}
-        label="Enter password"
+        render={({ onChange, onBlur, value }) => (
+          <Input
+            label="Enter password:"
+            errorStyle={{ color: "red" }}
+            errorMessage={errors.password?.message}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
+            secureTextEntry={true}
+          />
+        )}
         name="password"
-        defaultValue=""
         rules={{ required: "Password is required!" }}
-        error={errors.password && true}
-        helperText={errors.password?.message}
-        type="password"
+        defaultValue=""
       />
 
-      <Button
-        onClick={handleSubmit(onSubmit)}
-        variant="contained"
-        color="primary"
-        style={{ marginBottom: "10px", marginTop: "10px" }}
+      {ErrMess.length !==0 && (
+        <Text style={{ color: "red", marginBottom: 10 }}>
+          {ErrMess}
+        </Text>
+      )}
+
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        style={styles.appButtonContainer}
       >
-        Login
-      </Button>
+        <Text style={styles.appButtonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const stylesInput = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#fff"
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  input: {
+    borderBottomWidth: 2,
+    borderBottomColor: "grey",
+    width: "90%",
+  },
+  label: {
+    width: "90%",
+  },
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: "50%",
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase",
   },
 });
 

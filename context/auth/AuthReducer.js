@@ -1,4 +1,4 @@
-import { RESTORE_TOKEN, SIGN_IN, SIGN_OUT } from "./actions";
+import { IS_LOADING, RESTORE_TOKEN, SIGN_IN, SIGN_OUT } from "./actions";
 
 const AuthReducer = (state, action) => {
   switch (action.type) {
@@ -14,6 +14,7 @@ const AuthReducer = (state, action) => {
         ...state,
         isOut: false,
         userToken: action.token,
+        isLoading: false,
       };
 
     case SIGN_OUT:
@@ -22,6 +23,12 @@ const AuthReducer = (state, action) => {
         userToken: null,
         isOut: true,
       };
+
+      case IS_LOADING: 
+        return {
+          ...state,
+          isLoading: action.load
+        }
 
     default:
       return state;

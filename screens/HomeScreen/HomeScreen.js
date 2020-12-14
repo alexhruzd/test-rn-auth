@@ -4,9 +4,9 @@ import { StyleSheet, Text, View } from "react-native";
 
 const HomeScreen = ({navigation}) => {
 
-  useEffect(() => {
+  /*useEffect(() => {
     navigation.openDrawer();
-  }, []);
+  }, []);*/
 
   return (
     <View style={styles.container}>

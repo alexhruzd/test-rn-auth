@@ -6,18 +6,13 @@ import StartScreen from "../screens/StartScreen/StartScreen";
 
 const Stack = createStackNavigator();
 
-const StartStackNavigator = ({isOut}) => {
+const StartStackNavigator = () => {
+
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Start">
-        {(props) => <StartScreen {...props} />}
-      </Stack.Screen>
-      <Stack.Screen name="Login" oprtions={{animationTypeForReplace: isOut ? 'pop' : 'push',}}>
-        {(props) => <LoginScreen {...props} />}
-      </Stack.Screen>
-      <Stack.Screen name="Register">
-        {(props) => <RegisterScreen {...props} />}
-      </Stack.Screen>
+    <Stack.Navigator initialRouteName="Start">
+      <Stack.Screen name="Start" component={StartScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
 };
