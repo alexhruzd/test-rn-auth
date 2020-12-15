@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Input } from "react-native-elements";
@@ -9,15 +8,16 @@ const RegisterScreen = () => {
   const { control, handleSubmit, errors } = useForm({ mode: "onChange" });
   const [failPassword, setFailPassword] = useState(false);
   const [failUser, setFailUser] = useState(false);
-  const { onRegister, onLoading } = React.useContext(AuthContext);
+  const { onRegister, onLoading } = useContext(AuthContext);
 
   const onSubmit = (data) => {
     if (data.password !== data.passwordRetry) {
       setFailPassword(true);
     } else {
-
+      onLoading(true);
       onRegister(data).then((err) => {
-        !err && setFailUser(true)
+        onLoading(false);
+        !err && setFailUser(true);
       });
     }
   };
@@ -87,7 +87,7 @@ const RegisterScreen = () => {
           />
         )}
         name="passwordRetry"
-        rules={{ required: "Reapeted password is required!" }}
+        rules={{ required: "Repeated password is required!" }}
         defaultValue=""
       />
 

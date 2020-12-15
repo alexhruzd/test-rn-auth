@@ -14,7 +14,6 @@ const AuthReducer = (state, action) => {
         ...state,
         isOut: false,
         userToken: action.token,
-        isLoading: false,
       };
 
     case SIGN_OUT:

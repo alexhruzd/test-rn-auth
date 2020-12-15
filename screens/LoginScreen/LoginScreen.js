@@ -6,12 +6,14 @@ import AuthContext from "../../context/auth/AuthContext";
 
 const LoginScreen = () => {
   const { control, handleSubmit, errors } = useForm({ mode: "onChange" });
-  const { onSignIn } = React.useContext(AuthContext);
+  const { onSignIn, onLoading } = React.useContext(AuthContext);
   const [ErrMess, setErrMess] = useState("");
 
   const onSubmit = (data) => {
+    onLoading(true);
     onSignIn(data).then((mess) => {
       setErrMess(mess);
+      onLoading(false);
     });
   };
 
@@ -51,10 +53,8 @@ const LoginScreen = () => {
         defaultValue=""
       />
 
-      {ErrMess.length !==0 && (
-        <Text style={{ color: "red", marginBottom: 10 }}>
-          {ErrMess}
-        </Text>
+      {ErrMess.length !== 0 && (
+        <Text style={{ color: "red", marginBottom: 10 }}>{ErrMess}</Text>
       )}
 
       <TouchableOpacity
