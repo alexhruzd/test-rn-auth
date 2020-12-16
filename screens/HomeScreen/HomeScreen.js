@@ -6,7 +6,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Hello!! This is HomePage</Text>
+      <Text>Hello!! This is HomePage!</Text>
     </View>
   );
 };

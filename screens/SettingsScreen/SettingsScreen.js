@@ -9,7 +9,7 @@ const SettingsScreen = () => {
     <View style={styles.container}>
     <Text>Hello!! This is SettingsPage</Text>
 
-    <TouchableOpacity onPress={onSignOut} style={styles.appButtonContainer}>
+    <TouchableOpacity onPress={onSignOut} style={styles.appButtonContainer} testID="logOutButton">
         <Text style={styles.appButtonText}>Log out</Text>
       </TouchableOpacity>
   </View>

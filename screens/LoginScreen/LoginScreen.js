@@ -10,10 +10,8 @@ const LoginScreen = () => {
   const [ErrMess, setErrMess] = useState("");
 
   const onSubmit = (data) => {
-    onLoading(true);
     onSignIn(data).then((mess) => {
       setErrMess(mess);
-      onLoading(false);
     });
   };
 
