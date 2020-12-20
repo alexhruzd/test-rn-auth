@@ -7,7 +7,9 @@ const withMovieData = (Component, getData) => {
     useEffect(() => {
       getData(props.id).then((movie) => {
         setMovie(movie);
+        props.onWatched(props.id);
       });
+
     }, []);
 
     return (
