@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 const CheckBoxItem = ({
@@ -15,8 +15,6 @@ const CheckBoxItem = ({
       onCheked(!isChecked);
     }
     setChecked(!isChecked);
-
-
   };
 
   return (
@@ -61,7 +59,6 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     alignItems: "center",
-    paddingLeft: 10,
     paddingRight: 10,
   },
   icon: {

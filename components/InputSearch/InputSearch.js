@@ -10,8 +10,8 @@ const InputSearch = ({ placeholder, onSearch, imgSrc }) => {
         style={styles.input}
         value={value}
         onChangeText={(text) => {
+          onSearch(text);
           setValue(text);
-          onSearch(value);
         }}
         placeholder={placeholder}
       />
@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderColor: "gray",
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
 

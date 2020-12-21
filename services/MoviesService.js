@@ -7,12 +7,15 @@ class MoviesService {
 
   _popularMovies = "/movie/popular";
   _movie = "/movie/";
+  _search_movie = "/search/movie";
 
   pageString = (pageNum) => (pageNum ? `page=${pageNum}` : "");
+  searchString = (search) => (search ? `query=${search}` : "")
   movieUrl = (id) => `${this._movie}${id}`;
 
-  async getData(url, page="") {
-    let fullUrl = `${this._baseURL}${url}?${this._apiKey}&${this._language}&${page}`;
+  async getData(url, page = "", search = "") {
+    let fullUrl = `${this._baseURL}${url}?${this._apiKey}&${this._language}&${page}&${search}`;
+    //console.log(fullUrl)
     const response = await fetch(fullUrl);
     if (!response.ok) {
       throw new Error(`We have a problem with fetch ${url}!!!`);
@@ -25,12 +28,17 @@ class MoviesService {
       this._popularMovies,
       this.pageString(page)
     );
-    return response.results.map(this.transformPopularMovies);
+    return response.results.map(this.transformListMovies);
   };
 
   getMovieFromId = async (id) => {
     const response = await this.getData(this.movieUrl(id));
     return this.transformMovie(response);
+  };
+
+  getMovieFromSearch = async (page, search) => {
+    const response = await this.getData(this._search_movie, this.pageString(page), this.searchString(search));
+    return response.results.map(this.transformListMovies);
   };
 
   transformMovie = (movie) => {
@@ -43,7 +51,7 @@ class MoviesService {
     };
   };
 
-  transformPopularMovies = (movie) => {
+  transformListMovies = (movie) => {
     return {
       id: movie.id,
       title: movie.title,
