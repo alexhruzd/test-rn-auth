@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Image, StyleSheet, TextInput, View } from "react-native";
 
-const InputSearch = ({ placeholder, onSearch, imgSrc }) => {
+const InputSearch = ({ placeholder, onSearch, withIcon }) => {
   const [value, setValue] = useState("");
 
   return (
     <View style={styles.container}>
+
+    {withIcon !== undefined && (
+        <Image
+          style={styles.icon}
+          source={require("./search.png")}
+        />
+      )}
+
       <TextInput
         style={styles.input}
         value={value}
         onChangeText={(text) => {
-          onSearch(text);
+          typeof onSearch === "function" && onSearch(text);
           setValue(text);
         }}
         placeholder={placeholder}
@@ -23,18 +31,23 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "#fff",
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "gray",
+    width: "100%"
   },
   input: {
     width: "100%",
     height: 40,
-    borderWidth: 1,
-    borderColor: "gray",
     paddingLeft: 5,
     paddingRight: 5,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginLeft: 5
   },
 });
 

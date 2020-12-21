@@ -22,27 +22,84 @@ const MoviesScreen = () => {
   const [checkUnWatched, setCheckUnWatched] = useState(false);
   const [searchState, setSearchState] = useState(false);
 
+  ///////////////////////// effects
+
   useEffect(() => {
-    getMyMovies().then((myMovies) => {
-      if (myMovies.length !== 0) {
-        setDataList(myMovies);
+    getMyMovies().then((movies) => {
+      if (movies.length !== 0) {
+        setMyMovie(movies);
+        setDataList(movies);
       } 
+    });
+    getMyWatched().then((movies) => {
+      if (movies.length !== 0) {
+        setListWatched(movies);
+      }
+    });
+    getMyUnwatched().then((movies) => {
+      if (movies.length !== 0) {
+        setListUnWatched(movies);
+      }
     });
   }, []);
 
   useEffect(() => {
-    console.log(myMovies)
-    if (searchState) refreshList(dataList);
+    if (searchState || myMovies.length === 0) refreshList(dataList);
     else refreshList(myMovies);
-  }, [checkWatched, checkUnWatched, listUnWatched, listWatched, dataList, searchState]);
+  }, [
+    checkWatched,
+    checkUnWatched,
+    listUnWatched,
+    listWatched,
+    dataList,
+    searchState,
+  ]);
+
+  useEffect(() => {
+    const setMovie = async () => {
+      await AsyncStorage.removeItem("myMovies");
+      await AsyncStorage.setItem("myMovies", JSON.stringify(myMovies));
+    };
+    setMovie();
+  }, [myMovies]);
+
+  useEffect(() => {
+    const setMovie = async () => {
+      await AsyncStorage.removeItem("myWatched");
+      await AsyncStorage.setItem("myWatched", JSON.stringify(listWatched));
+    };
+    setMovie();
+  }, [listWatched]);
+
+  useEffect(() => {
+    const setMovie = async () => {
+      await AsyncStorage.removeItem("myUnwatched");
+      await AsyncStorage.setItem("myUnwatched", JSON.stringify(listUnWatched));
+    };
+    setMovie();
+  }, [listUnWatched]);
+
+  ///////////////////////////////////////////////////////
   
+  /////////////////////////////////// get storage
 
   const getMyMovies = async () => {
     let myMovies = await AsyncStorage.getItem("myMovies");
-    
-    return  !myMovies ? [] : JSON.parse(myMovies);
+    return !myMovies ? [] : JSON.parse(myMovies);
+  };
+  const getMyWatched = async () => {
+    let myWatched = await AsyncStorage.getItem("myWatched");
+    return !myWatched ? [] : JSON.parse(myWatched);
+  };
+  const getMyUnwatched = async () => {
+    let myUnwatched = await AsyncStorage.getItem("myUnwatched");
+    return !myUnwatched ? [] : JSON.parse(myUnwatched);
   };
 
+  ////////////////////////////////////////////////////////////
+
+
+  
   const onSearchMovieDB = (search) => {
     if (search.length !== 0) {
       setSearchState(true);
@@ -52,10 +109,6 @@ const MoviesScreen = () => {
       });
     } else {
       setSearchState(false);
-
-      movieService.getPopularMovies(1).then((movies) => {
-        setDataList(movies);
-      });
     }
   };
 
@@ -70,10 +123,6 @@ const MoviesScreen = () => {
       );
     } else {
       setSearchState(false);
-
-      movieService.getPopularMovies(1).then((movies) => {
-        setDataList(movies);
-      });
     }
   };
 
@@ -144,10 +193,13 @@ const MoviesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>This is MoviesScreen!</Text>
 
       <View style={styles.searchBlock}>
-        <InputSearch placeholder="Search MovieDB" onSearch={onSearchMovieDB} />
+        <InputSearch
+          placeholder="Search MovieDB"
+          onSearch={onSearchMovieDB}
+          withIcon
+        />
         <InputSearch
           placeholder="Search My Movies"
           onSearch={onSearchMyMovies}

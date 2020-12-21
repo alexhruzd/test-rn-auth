@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "#fff",
+    width: "100%"
   },
   poster: {
     width: 100,

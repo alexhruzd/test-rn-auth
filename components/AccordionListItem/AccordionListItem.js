@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 const AccordionListItem = ({ title, children }) => {
   const [isContent, showContent] = useState(false);
